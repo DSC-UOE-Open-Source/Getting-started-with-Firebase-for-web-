@@ -11,23 +11,72 @@ const loginUser = () => {
         .catch(err => alert(err.message));
 }
 
+// getting user profile
 const getUserProfile = () => {
-    let user = firebase.auth().currentUser;
+    const user = firebase.auth().currentUser;
 
-    if(user != null) {
-        console.log(user);
+    if( user != null ) {
+        console.log(user)
     }
-    else{
-        console.log('eerr')
+    else {
+        alert('user does not exist')
     }
 }
-// sign with Google
-// const signInWithGoogle = () => {
-//     const GOOGLE_AUTH_PROVIDER = new firebase.auth.GoogleAuthProvider();
+
+// logout user
+const logout = () => {
+    firebase.auth().signOut()
+        .then(() => {
+            alert('Logged out')
+        })
+        .catch(err => alert(err.message));
+}
+
+// updating user profile
+const updateProfile = () => {
+    const user = firebase.auth().currentUser;
+
+    if( user != null ) {
+        user.updateProfile({
+            displayName: 'Updated'
+        })
+        user.updateEmail('updating@gmail.com');
+    }
+    else {
+        alert('user does not exist')
+    }
+} 
+
+// delete user
+
+const deleteUser = () => {
+    const user = firebase.auth().currentUser;
     
-//     firebase.auth().signInWithPopup(GOOGLE_AUTH_PROVIDER)
-//         .then(() => {
-//             window.location.assign('about.html');
-//         })
-//         .catch(err => alert(err.message));
-// }
+    user.delete()
+        .then(() => {
+            alert('user deleted');
+        })
+        .catch(err => alert(err.message))
+}
+
+// verify email
+const verifyUser = () => {
+    const user = firebase.auth().currentUser;
+
+    user.sendEmailVerification()
+        .then(() => {
+            alert(`Email sent to ${ user.email }`);
+        })
+        .catch(err => alert(err.message));
+}
+
+// reset password
+const resetPass = () => {
+    const user = firebase.auth().currentUser;
+
+    firebase.auth().sendPasswordResetEmail(user.email)
+        .then(() => {
+            alert(`Email sent to ${ user.email }`)
+        })
+        .catch(err => alert(err.message));
+}
